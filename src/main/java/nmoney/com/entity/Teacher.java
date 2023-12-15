@@ -26,7 +26,7 @@ public class Teacher {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "Age")
+    @Column(name = "age")
     private int age;
 
     @Column(name = "email")
