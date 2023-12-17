@@ -2,6 +2,8 @@ package nmoney.com.repository;
 
 import nmoney.com.entity.Teacher;
 import nmoney.com.entity.TeacherClone;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,4 +26,10 @@ public interface TeacherCloneRepository extends JpaRepository<TeacherClone, Inte
 
     @Query("SELECT tc.teacherAge FROM TeacherClone tc WHERE teacherName = :name")
     List<Integer> getAgeByNameJPQL(String name);
+
+    @Query("SELECT tc FROM TeacherClone tc")
+    List<TeacherClone> findAllList(Pageable pageable);
+
+    @Query("SELECT tc FROM TeacherClone tc")
+    Slice<TeacherClone> findAllSlice(Pageable pageable);
 }
