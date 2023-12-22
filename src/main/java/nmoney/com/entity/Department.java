@@ -1,5 +1,8 @@
 package nmoney.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +32,7 @@ public class Department {
     @Column(name = "name")
     private String name;
 
-//    @OneToMany(mappedBy = "department")
-//    private List<Employee> employees;
+    @OneToMany(mappedBy = "department")
+    @JsonIgnore
+    private List<Employee> employees;
 }

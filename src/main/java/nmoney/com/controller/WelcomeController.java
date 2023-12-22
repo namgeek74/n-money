@@ -1,10 +1,20 @@
 package nmoney.com.controller;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import nmoney.com.dto.PagePayload;
 import nmoney.com.entity.Department;
 import nmoney.com.entity.Employee;
 import nmoney.com.entity.Teacher;
 import nmoney.com.entity.TeacherClone;
+import nmoney.com.repository.DepartmentRepository;
 import nmoney.com.repository.EmployeeRepository;
 import nmoney.com.repository.TeacherCloneRepository;
 import nmoney.com.repository.TeacherRepository;
@@ -19,7 +29,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class WelcomeController {
@@ -29,14 +41,18 @@ public class WelcomeController {
 
     private TeacherCloneRepository teacherCloneRepository;
 
+    private DepartmentRepository departmentRepository;
+
     public WelcomeController(
             TeacherRepository teacherRepository,
             TeacherCloneRepository teacherCloneRepository,
-            EmployeeRepository employeeRepository
+            EmployeeRepository employeeRepository,
+            DepartmentRepository departmentRepository
     ) {
         this.teacherRepository = teacherRepository;
         this.teacherCloneRepository = teacherCloneRepository;
         this.employeeRepository = employeeRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @GetMapping("/welcome-message")
@@ -157,7 +173,55 @@ public class WelcomeController {
     }
 
     @GetMapping("/test-jpa")
-    public List<Employee> findListDepartment() {
+    public List<Employee> findListDepartment() throws JsonProcessingException {
+        test();
         return employeeRepository.findAll();
+    }
+
+    @GetMapping("/test-jpa-1")
+    public List<Employee> findAllDepartment() {
+        Optional<Department> department = departmentRepository.findById(1);
+        if (department.isPresent()) {
+//            System.out.println(department);
+            List<Employee> employees = employeeRepository.findByDepartment(department.get());
+            return employees;
+        }
+        return null;
+    }
+
+    public void test() throws JsonProcessingException {
+        User user = new User(1, "John", new ArrayList<Item>());
+        Item item = new Item(2, "book", user);
+        user.getUserItems().add(item);
+
+        final String itemJson = new ObjectMapper().writeValueAsString(item);
+        final String userJson = new ObjectMapper().writeValueAsString(user);
+
+        System.out.println(itemJson);
+        System.out.println(userJson);
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class User {
+        public int id;
+        public String name;
+        @JsonBackReference
+        public List<Item> userItems;
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public class Item {
+        public int id;
+        public String itemName;
+        @JsonManagedReference
+        public User owner;
     }
 }

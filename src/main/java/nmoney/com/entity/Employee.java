@@ -1,5 +1,7 @@
 package nmoney.com.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -33,12 +35,12 @@ public class Employee {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "department_id")
-    private int departmentId;
+//    @Column(name = "department_id")
+//    private int departmentId;
 
-//    @ManyToOne
-//    @JoinColumn(name = "\"departmentId\"")
-//    private Department department;
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
 
 //    @OneToMany(mappedBy = "employee")
 //    private List<Phone> phones;
