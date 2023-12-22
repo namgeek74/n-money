@@ -1,8 +1,11 @@
 package nmoney.com.controller;
 
 import nmoney.com.dto.PagePayload;
+import nmoney.com.entity.Department;
+import nmoney.com.entity.Employee;
 import nmoney.com.entity.Teacher;
 import nmoney.com.entity.TeacherClone;
+import nmoney.com.repository.EmployeeRepository;
 import nmoney.com.repository.TeacherCloneRepository;
 import nmoney.com.repository.TeacherRepository;
 import org.springframework.data.domain.Page;
@@ -22,14 +25,18 @@ import java.util.List;
 public class WelcomeController {
     private TeacherRepository teacherRepository;
 
+    private EmployeeRepository employeeRepository;
+
     private TeacherCloneRepository teacherCloneRepository;
 
     public WelcomeController(
             TeacherRepository teacherRepository,
-            TeacherCloneRepository teacherCloneRepository
+            TeacherCloneRepository teacherCloneRepository,
+            EmployeeRepository employeeRepository
     ) {
         this.teacherRepository = teacherRepository;
         this.teacherCloneRepository = teacherCloneRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     @GetMapping("/welcome-message")
@@ -147,5 +154,10 @@ public class WelcomeController {
         public void setPageSize(int pageSize) {
             this.pageSize = pageSize;
         }
+    }
+
+    @GetMapping("/test-jpa")
+    public List<Employee> findListDepartment() {
+        return employeeRepository.findAll();
     }
 }
