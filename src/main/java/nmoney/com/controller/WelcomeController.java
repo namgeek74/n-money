@@ -173,9 +173,9 @@ public class WelcomeController {
     }
 
     @GetMapping("/test-jpa")
-    public List<Employee> findListDepartment() throws JsonProcessingException {
-        test();
-        return employeeRepository.findAll();
+    public List<Department> findListDepartment() throws JsonProcessingException {
+//        test();
+        return employeeRepository.findListDepartment();
     }
 
     @GetMapping("/test-jpa-1")
@@ -223,5 +223,10 @@ public class WelcomeController {
         public String itemName;
         @JsonManagedReference
         public User owner;
+    }
+
+    @GetMapping("/test-jpa-2")
+    public List<Department> findDepartmentByJoin() {
+        return employeeRepository.findDepartmentByJoin();
     }
 }
