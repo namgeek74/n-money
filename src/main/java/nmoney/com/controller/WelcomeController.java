@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import nmoney.com.dto.DepartmentDTO;
+import nmoney.com.dto.EmployeeDTO;
 import nmoney.com.dto.PagePayload;
 import nmoney.com.entity.Department;
 import nmoney.com.entity.Employee;
@@ -228,5 +230,40 @@ public class WelcomeController {
     @GetMapping("/test-jpa-2")
     public List<Department> findDepartmentByJoin() {
         return employeeRepository.findDepartmentByJoin();
+    }
+
+    @GetMapping("/test-jpa-3")
+    public List<Department> getDepartmentJoinFetch() {
+        return departmentRepository.getDepartmentJoinFetch();
+    }
+
+    @GetMapping("/test-jpa-4")
+    public List<Department> getDepartmentLeftJoinFetch() {
+        System.out.println("start");
+        List<Department> departments = departmentRepository.getDepartmentLeftJoinFetch();
+        System.out.println("end");
+        return departmentRepository.getDepartmentLeftJoinFetch();
+    }
+
+    @GetMapping("/test-jpa-5")
+    public List<DepartmentDTO> getDepartmentDTOLeftJoinFetch() {
+        System.out.println("start");
+        List<Department> allDepartment = departmentRepository.findAll();
+        List<Department> departments = departmentRepository.getDepartmentLeftJoinFetch();
+        List<DepartmentDTO> departmentDTOList = new ArrayList<>();
+        for (Department d :
+                departments) {
+            DepartmentDTO departmentDTO = new DepartmentDTO(d.getId(), d.getName());
+            List<EmployeeDTO> employeeDTOList = new ArrayList<>();
+            for (Employee e :
+                    d.getEmployees()) {
+                EmployeeDTO employeeDTO = new EmployeeDTO(e.getId(), e.getName());
+                employeeDTOList.add(employeeDTO);
+            }
+            departmentDTO.setEmployees(employeeDTOList);
+            departmentDTOList.add(departmentDTO);
+        }
+        System.out.println("end");
+        return departmentDTOList;
     }
 }
