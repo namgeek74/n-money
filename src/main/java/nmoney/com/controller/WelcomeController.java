@@ -251,12 +251,10 @@ public class WelcomeController {
         List<Department> allDepartment = departmentRepository.findAll();
         List<Department> departments = departmentRepository.getDepartmentLeftJoinFetch();
         List<DepartmentDTO> departmentDTOList = new ArrayList<>();
-        for (Department d :
-                departments) {
+        for (Department d : departments) {
             DepartmentDTO departmentDTO = new DepartmentDTO(d.getId(), d.getName());
             List<EmployeeDTO> employeeDTOList = new ArrayList<>();
-            for (Employee e :
-                    d.getEmployees()) {
+            for (Employee e : d.getEmployees()) {
                 EmployeeDTO employeeDTO = new EmployeeDTO(e.getId(), e.getName());
                 employeeDTOList.add(employeeDTO);
             }
