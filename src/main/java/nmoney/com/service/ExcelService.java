@@ -13,11 +13,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +68,6 @@ public class ExcelService {
         Workbook workbook = new XSSFWorkbook(file.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
         for (Row row : sheet) {
-//                data.put(i, new ArrayList<String>());
             for (Cell cell : row) {
                 System.out.println("Cell: " + cell.getCellType());
                 if (cell.getCellType() == CellType.STRING) {
@@ -180,5 +182,26 @@ public class ExcelService {
         byte[] fileBytes = out.toByteArray();
         return fileBytes;
 
+    }
+
+    // provide url resource which can get excel file directly
+    private static final String url = "url_sample";
+
+    public void getDataFromResourceUrl() throws IOException {
+        BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+
+        Workbook workbook = new XSSFWorkbook(in);
+        Sheet sheet = workbook.getSheetAt(0);
+        for (Row row : sheet) {
+            for (Cell cell : row) {
+                System.out.println("Cell: " + cell.getCellType());
+                if (cell.getCellType() == CellType.STRING) {
+                    System.out.println("Cell value: " + cell.getStringCellValue());
+                } else if (cell.getCellType() == CellType.NUMERIC) {
+                    System.out.println("Cell numeric value: " + cell.getNumericCellValue());
+                }
+
+            }
+        }
     }
 }

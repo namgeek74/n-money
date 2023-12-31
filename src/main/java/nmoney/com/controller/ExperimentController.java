@@ -5,6 +5,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,5 +43,10 @@ public class ExperimentController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Content-Disposition", "attachment; filename=generated-file.xlsx");
         return ResponseEntity.ok().headers(httpHeaders).body(excelService.generateExcelFile());
+    }
+
+    @GetMapping("/read-exchange-rate")
+    public void readExchangeRate() throws IOException {
+        excelService.getDataFromResourceUrl();
     }
 }
